@@ -1,0 +1,17 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pr: none
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+
+  - script: |
+      echo "Pipeline triggered by a push to master!"
+      echo "Commit: $(Build.SourceVersion)"
+    displayName: "Test pipeline"
