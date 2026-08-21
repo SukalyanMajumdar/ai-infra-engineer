@@ -6,7 +6,7 @@
 #   terraform plan -var-file=../inputs/core.tfvars -var-file=../inputs/dev.tfvars
 # ---------------------------------------------------------------------------
 
-subscription_id = "00000000-0000-0000-0000-000000000000"
+subscription_id = "99cc4496-f588-4b74-ae76-3aca775f7797"
 
 common_tags = {
   managed_by = "terraform"
