@@ -31,6 +31,9 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
+      - name: Verify Azure Login
+        run: az account show
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
