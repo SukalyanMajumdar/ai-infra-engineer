@@ -47,6 +47,7 @@ jobs:
         run: terraform validate
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve \
-          -var-file="inputs/core.tfvars" \
-          -var-file="inputs/dev.tfvars"
+        run: |
+          terraform apply -auto-approve \
+            -var-file="inputs/core.tfvars" \
+            -var-file="inputs/dev.tfvars"
