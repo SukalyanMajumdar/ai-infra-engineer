@@ -12,13 +12,13 @@ environment = "dev"
 # ---------------------------------------------------------------------------
 resource_groups = {
   app = {
-    name     = "rg-myapp-dev-eastus"
-    location = "eastus"
+    name     = "rg-myapp-dev-southindia"
+    location = "southindia"
     tags     = { component = "app" }
   }
   data = {
-    name     = "rg-myapp-data-dev-eastus"
-    location = "eastus"
+    name     = "rg-myapp-data-dev-southindia"
+    location = "southindia"
     tags     = { component = "data" }
   }
 }
@@ -28,9 +28,9 @@ resource_groups = {
 # ---------------------------------------------------------------------------
 vnets = {
   main = {
-    name                = "vnet-myapp-dev-eastus"
+    name                = "vnet-myapp-dev-southindia"
     resource_group_key = "app"
-    location            = "eastus"
+    location            = "southindia"
     address_space       = ["10.10.0.0/16"]
     tags                = { component = "network" }
   }
@@ -63,7 +63,7 @@ storage_accounts = {
   appdata = {
     name                      = "stmyappdevea001"
     resource_group_key       = "data"
-    location                  = "eastus"
+    location                  = "southindia"
     account_tier               = "Standard"
     account_replication_type   = "LRS"
     tags                       = { component = "data" }
@@ -71,7 +71,7 @@ storage_accounts = {
   diagnostics = {
     name                      = "stmyappdiagdevea001"
     resource_group_key       = "data"
-    location                  = "eastus"
+    location                  = "southindia"
     account_tier               = "Standard"
     account_replication_type   = "LRS"
     access_tier                 = "Cool"
@@ -86,13 +86,13 @@ network_security_groups = {
   app = {
     name                = "nsg-app-dev"
     resource_group_key = "app"
-    location            = "eastus"
+    location            = "southindia"
     tags                = { component = "network" }
   }
   data = {
     name                = "nsg-data-dev"
     resource_group_key = "app"
-    location            = "eastus"
+    location            = "southindia"
     tags                = { component = "network" }
   }
 }
