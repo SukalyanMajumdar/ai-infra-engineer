@@ -47,6 +47,12 @@ subnets = {
     address_prefixes    = ["10.10.1.0/24"]
     service_endpoints    = ["Microsoft.Storage"]
   }
+  app2 = {
+    name               = "snet-app2-dev"
+    resource_group_key = "app"
+    vnet_key           = "main"
+    address_prefixes   = ["10.10.3.0/24"]
+  }
   data = {
     name                = "snet-data-dev"
     resource_group_key = "app"
