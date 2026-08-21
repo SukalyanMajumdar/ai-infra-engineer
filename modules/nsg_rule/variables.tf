@@ -2,8 +2,8 @@ variable "nsg_rules" {
   description = "Map of NSG rules to create. Key is a logical name used for referencing outputs."
   type = map(object({
     name                         = string
-    resource_group_name         = string
-    network_security_group_name = string
+    resource_group_name          = string
+    network_security_group_name  = string
     priority                     = number
     direction                    = string # Inbound or Outbound
     access                       = string # Allow or Deny

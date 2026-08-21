@@ -5,19 +5,19 @@ locals {
 
   storage_accounts = {
     for k, v in var.storage_accounts : k => {
-      name                             = v.name
-      resource_group_name              = module.resource_group.resource_group_names[v.resource_group_key]
-      location                         = v.location
-      account_tier                     = v.account_tier
-      account_replication_type         = v.account_replication_type
-      account_kind                     = v.account_kind
-      access_tier                      = v.access_tier
-      min_tls_version                  = v.min_tls_version
-      https_traffic_only_enabled       = v.https_traffic_only_enabled
-      allow_nested_items_to_be_public  = v.allow_nested_items_to_be_public
-      public_network_access_enabled    = v.public_network_access_enabled
-      is_hns_enabled                   = v.is_hns_enabled
-      tags                             = merge(var.common_tags, v.tags)
+      name                            = v.name
+      resource_group_name             = module.resource_group.resource_group_names[v.resource_group_key]
+      location                        = v.location
+      account_tier                    = v.account_tier
+      account_replication_type        = v.account_replication_type
+      account_kind                    = v.account_kind
+      access_tier                     = v.access_tier
+      min_tls_version                 = v.min_tls_version
+      https_traffic_only_enabled      = v.https_traffic_only_enabled
+      allow_nested_items_to_be_public = v.allow_nested_items_to_be_public
+      public_network_access_enabled   = v.public_network_access_enabled
+      is_hns_enabled                  = v.is_hns_enabled
+      tags                            = merge(var.common_tags, v.tags)
     }
   }
 
@@ -62,22 +62,22 @@ locals {
 
   nsg_rules = {
     for k, v in var.nsg_rules : k => {
-      name                          = v.name
-      resource_group_name           = module.resource_group.resource_group_names[v.resource_group_key]
-      network_security_group_name   = module.nsg.nsg_names[v.nsg_key]
-      priority                      = v.priority
-      direction                     = v.direction
-      access                        = v.access
-      protocol                      = v.protocol
-      source_port_range             = v.source_port_range
-      source_port_ranges            = v.source_port_ranges
-      destination_port_range        = v.destination_port_range
-      destination_port_ranges       = v.destination_port_ranges
-      source_address_prefix         = v.source_address_prefix
-      source_address_prefixes       = v.source_address_prefixes
-      destination_address_prefix    = v.destination_address_prefix
-      destination_address_prefixes  = v.destination_address_prefixes
-      description                   = v.description
+      name                         = v.name
+      resource_group_name          = module.resource_group.resource_group_names[v.resource_group_key]
+      network_security_group_name  = module.nsg.nsg_names[v.nsg_key]
+      priority                     = v.priority
+      direction                    = v.direction
+      access                       = v.access
+      protocol                     = v.protocol
+      source_port_range            = v.source_port_range
+      source_port_ranges           = v.source_port_ranges
+      destination_port_range       = v.destination_port_range
+      destination_port_ranges      = v.destination_port_ranges
+      source_address_prefix        = v.source_address_prefix
+      source_address_prefixes      = v.source_address_prefixes
+      destination_address_prefix   = v.destination_address_prefix
+      destination_address_prefixes = v.destination_address_prefixes
+      description                  = v.description
     }
   }
 }
