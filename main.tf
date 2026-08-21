@@ -1,11 +1,11 @@
 module "resource_group" {
-  source = "../modules/resource_group"
+  source = "./modules/resource_group"
 
   resource_groups = var.resource_groups
 }
 
 module "vnet" {
-  source = "../modules/vnet"
+  source = "./modules/vnet"
 
   vnets = local.vnets
 
@@ -13,7 +13,7 @@ module "vnet" {
 }
 
 module "subnet" {
-  source = "../modules/subnet"
+  source = "./modules/subnet"
 
   subnets = local.subnets
 
@@ -21,7 +21,7 @@ module "subnet" {
 }
 
 module "storage_account" {
-  source = "../modules/storage_account"
+  source = "./modules/storage_account"
 
   storage_accounts = local.storage_accounts
 
@@ -29,7 +29,7 @@ module "storage_account" {
 }
 
 module "nsg" {
-  source = "../modules/nsg"
+  source = "./modules/nsg"
 
   network_security_groups = local.network_security_groups
   subnet_nsg_associations = local.subnet_nsg_associations
@@ -38,7 +38,7 @@ module "nsg" {
 }
 
 module "nsg_rule" {
-  source = "../modules/nsg_rule"
+  source = "./modules/nsg_rule"
 
   nsg_rules = local.nsg_rules
 

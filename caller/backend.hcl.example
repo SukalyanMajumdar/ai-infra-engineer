@@ -1,8 +1,0 @@
-# Copy this file to backend.hcl (gitignored) and fill in real values,
-# or pass the same keys via -backend-config on the CLI / in CI.
-resource_group_name  = "rg-tfstate-shared"
-storage_account_name = "sttfstateshared001"
-container_name        = "tfstate"
-key                    = "dev.terraform.tfstate"
-subscription_id        = "00000000-0000-0000-0000-000000000000"
-# use_azuread_auth = true   # optional: authenticate to the state storage account via Azure AD instead of access keys

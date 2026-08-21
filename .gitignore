@@ -1,37 +1,7 @@
-# Terraform
-**/.terraform/
+.env
+.terraform/
 *.tfstate
 *.tfstate.*
 *.tfplan
-crash.log
-crash.*.log
-
-# Terraform variable files
-*.tfvars
-*.tfvars.json
-!inputs.tfvars.example
-
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
-# Environment / secrets
-.env
-.env.*
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Terraform
-**/.terraform/
-*.tfstate
-*.tfstate.*
-crash.log
-crash.*.log
+.terraform.lock.hcl
+tfplan
