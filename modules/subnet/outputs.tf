@@ -1,9 +1,14 @@
-output "id" {
-  description = "Resource ID of the subnet"
-  value       = azurerm_subnet.this.id
+output "subnet_ids" {
+  description = "Map of subnet key => resource ID"
+  value       = { for k, v in azurerm_subnet.this : k => v.id }
 }
 
-output "name" {
-  description = "Name of the subnet"
-  value       = azurerm_subnet.this.name
+output "subnet_names" {
+  description = "Map of subnet key => name"
+  value       = { for k, v in azurerm_subnet.this : k => v.name }
+}
+
+output "subnet_address_prefixes" {
+  description = "Map of subnet key => address prefixes"
+  value       = { for k, v in azurerm_subnet.this : k => v.address_prefixes }
 }

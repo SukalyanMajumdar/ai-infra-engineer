@@ -1,25 +1,12 @@
-variable "name" {
-  description = "Name of the virtual network"
-  type        = string
-}
-
-variable "resource_group_name" {
-  description = "Name of the resource group to deploy into"
-  type        = string
-}
-
-variable "location" {
-  description = "Azure region for the virtual network"
-  type        = string
-}
-
-variable "address_space" {
-  description = "Address space for the virtual network"
-  type        = list(string)
-}
-
-variable "tags" {
-  description = "Tags to apply to the virtual network"
-  type        = map(string)
-  default     = {}
+variable "vnets" {
+  description = "Map of virtual networks to create. Key is a logical name used for referencing outputs and by the subnet module."
+  type = map(object({
+    name                = string
+    resource_group_name = string
+    location            = string
+    address_space       = list(string)
+    dns_servers         = optional(list(string), [])
+    tags                = optional(map(string), {})
+  }))
+  default = {}
 }

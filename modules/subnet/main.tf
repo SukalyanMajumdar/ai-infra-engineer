@@ -1,12 +1,21 @@
 resource "azurerm_subnet" "this" {
-  name                 = var.name
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = var.virtual_network_name
-  address_prefixes     = var.address_prefixes
-}
+  for_each = var.subnets
 
-resource "azurerm_subnet_network_security_group_association" "this" {
-  count                     = var.network_security_group_id != null ? 1 : 0
-  subnet_id                 = azurerm_subnet.this.id
-  network_security_group_id = var.network_security_group_id
+  name                              = each.value.name
+  resource_group_name               = each.value.resource_group_name
+  virtual_network_name              = each.value.virtual_network_name
+  address_prefixes                  = each.value.address_prefixes
+  service_endpoints                 = each.value.service_endpoints
+  private_endpoint_network_policies = each.value.private_endpoint_network_policies
+
+  dynamic "delegation" {
+    for_each = each.value.delegation != null ? [each.value.delegation] : []
+    content {
+      name = delegation.value.name
+      service_delegation {
+        name    = delegation.value.service_delegation_name
+        actions = delegation.value.service_delegation_actions
+      }
+    }
+  }
 }
