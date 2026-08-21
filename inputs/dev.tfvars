@@ -28,11 +28,11 @@ resource_groups = {
 # ---------------------------------------------------------------------------
 vnets = {
   main = {
-    name                = "vnet-myapp-dev-southindia"
+    name               = "vnet-myapp-dev-southindia"
     resource_group_key = "app"
-    location            = "southindia"
-    address_space       = ["10.10.0.0/16"]
-    tags                = { component = "network" }
+    location           = "southindia"
+    address_space      = ["10.10.0.0/16"]
+    tags               = { component = "network" }
   }
 }
 
@@ -41,18 +41,18 @@ vnets = {
 # ---------------------------------------------------------------------------
 subnets = {
   app = {
-    name                = "snet-app-dev"
+    name               = "snet-app-dev"
     resource_group_key = "app"
-    vnet_key            = "main"
-    address_prefixes    = ["10.10.1.0/24"]
-    service_endpoints    = ["Microsoft.Storage"]
+    vnet_key           = "main"
+    address_prefixes   = ["10.10.1.0/24"]
+    service_endpoints  = ["Microsoft.Storage"]
   }
   data = {
-    name                = "snet-data-dev"
+    name               = "snet-data-dev"
     resource_group_key = "app"
-    vnet_key            = "main"
-    address_prefixes    = ["10.10.2.0/24"]
-    service_endpoints    = ["Microsoft.Storage"]
+    vnet_key           = "main"
+    address_prefixes   = ["10.10.2.0/24"]
+    service_endpoints  = ["Microsoft.Storage"]
   }
 }
 
@@ -61,21 +61,21 @@ subnets = {
 # ---------------------------------------------------------------------------
 storage_accounts = {
   appdata = {
-    name                      = "stmyappdevea001"
+    name                     = "stmyappdevea001"
     resource_group_key       = "data"
-    location                  = "southindia"
-    account_tier               = "Standard"
-    account_replication_type   = "LRS"
-    tags                       = { component = "data" }
+    location                 = "southindia"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    tags                     = { component = "data" }
   }
   diagnostics = {
-    name                      = "stmyappdiagdevea001"
+    name                     = "stmyappdiagdevea001"
     resource_group_key       = "data"
-    location                  = "southindia"
-    account_tier               = "Standard"
-    account_replication_type   = "LRS"
-    access_tier                 = "Cool"
-    tags                       = { component = "diagnostics" }
+    location                 = "southindia"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    access_tier              = "Cool"
+    tags                     = { component = "diagnostics" }
   }
 }
 
@@ -84,16 +84,16 @@ storage_accounts = {
 # ---------------------------------------------------------------------------
 network_security_groups = {
   app = {
-    name                = "nsg-app-dev"
+    name               = "nsg-app-dev"
     resource_group_key = "app"
-    location            = "southindia"
-    tags                = { component = "network" }
+    location           = "southindia"
+    tags               = { component = "network" }
   }
   data = {
-    name                = "nsg-data-dev"
+    name               = "nsg-data-dev"
     resource_group_key = "app"
-    location            = "southindia"
-    tags                = { component = "network" }
+    location           = "southindia"
+    tags               = { component = "network" }
   }
 }
 
@@ -116,45 +116,31 @@ subnet_nsg_associations = {
 # ---------------------------------------------------------------------------
 nsg_rules = {
   allow_https_inbound = {
-    name                        = "Allow-HTTPS-Inbound"
-    nsg_key                     = "app"
+    name                       = "Allow-HTTPS-Inbound"
+    nsg_key                    = "app"
     resource_group_key         = "app"
-    priority                     = 100
-    direction                    = "Inbound"
-    access                       = "Allow"
-    protocol                     = "Tcp"
-    source_port_range            = "*"
-    destination_port_range       = "443"
-    source_address_prefix        = "Internet"
-    destination_address_prefix   = "*"
-    description                  = "Allow inbound HTTPS from the internet"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "*"
+    description                = "Allow inbound HTTPS from the internet"
   }
   deny_all_inbound = {
-    name                        = "Deny-All-Inbound"
-    nsg_key                     = "app"
+    name                       = "Deny-All-Inbound"
+    nsg_key                    = "app"
     resource_group_key         = "app"
-    priority                     = 4096
-    direction                    = "Inbound"
-    access                       = "Deny"
-    protocol                     = "*"
-    source_port_range            = "*"
-    destination_port_range       = "*"
-    source_address_prefix        = "*"
-    destination_address_prefix   = "*"
-    description                  = "Explicit deny-all catch-all rule"
-  }
-  allow_storage_from_app_subnet = {
-    name                        = "Allow-Storage-From-App-Subnet"
-    nsg_key                     = "data"
-    resource_group_key         = "app"
-    priority                     = 100
-    direction                    = "Inbound"
-    access                       = "Allow"
-    protocol                     = "Tcp"
-    source_port_range            = "*"
-    destination_port_range       = "445"
-    source_address_prefix        = "10.10.1.0/24"
-    destination_address_prefix   = "*"
-    description                  = "Allow SMB from the app subnet only"
+    priority                   = 4096
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+    description                = "Explicit deny-all catch-all rule"
   }
 }
