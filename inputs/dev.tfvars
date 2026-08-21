@@ -150,18 +150,4 @@ nsg_rules = {
     destination_address_prefix = "*"
     description                = "Explicit deny-all catch-all rule"
   }
-  allow_storage_from_app_subnet = {
-    name                       = "Allow-Storage-From-App-Subnet"
-    nsg_key                    = "data"
-    resource_group_key         = "app"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "445"
-    source_address_prefix      = "10.10.1.0/24"
-    destination_address_prefix = "*"
-    description                = "Allow SMB from the app subnet only"
-  }
 }
