@@ -7,6 +7,10 @@ on:
 
 permissions:
   contents: read
+  
+concurrency:
+  group: terraform-apply
+  cancel-in-progress: false
 
 jobs:
   terraform-apply:
