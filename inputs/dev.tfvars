@@ -84,6 +84,14 @@ storage_accounts = {
     access_tier              = "Cool"
     tags                     = { component = "diagnostics" }
   }
+  purpose13 = {
+    name                     = "stmyapppurpose13devea001"
+    resource_group_key       = "data"
+    location                 = "southindia"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    tags                     = { component = "purpose13" }
+  }
 }
 
 # ---------------------------------------------------------------------------
