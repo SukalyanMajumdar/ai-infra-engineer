@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: terraform-plan
+  cancel-in-progress: false
+
 jobs:
   terraform-plan:
     name: Terraform Plan
