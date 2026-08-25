@@ -55,4 +55,14 @@ jobs:
         run: |
           terraform plan \
             -var-file="inputs/core.tfvars" \
-            -var-file="inputs/dev.tfvars"
+            -var-file="inputs/dev.tfvars" \
+            -out=tfplan
+      
+      - name: Terraform Plan JSON
+        run: terraform show -json tfplan > tfplan.json
+      
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan-${{ inputs.branch }}
+          path: tfplan.json
