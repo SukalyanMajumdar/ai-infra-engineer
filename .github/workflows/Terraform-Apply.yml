@@ -55,3 +55,59 @@ jobs:
           terraform apply -auto-approve \
             -var-file="inputs/core.tfvars" \
             -var-file="inputs/dev.tfvars"
+      - name: Get Jira ticket ID
+        id: jira
+        shell: bash
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+      
+          TICKET_ID=$(echo "$BRANCH" | grep -oE 'KAN-[0-9]+' | head -n 1)
+      
+          if [ -z "$TICKET_ID" ]; then
+            echo "WARNING: Could not find Jira ticket ID in branch: $BRANCH"
+            exit 0
+          fi
+      
+          echo "ticket_id=$TICKET_ID" >> "$GITHUB_OUTPUT"
+          echo "Jira ticket: $TICKET_ID"
+      
+      - name: Close Jira issue
+        if: steps.jira.outputs.ticket_id != ''
+        continue-on-error: true
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          JIRA_ISSUE_KEY: ${{ steps.jira.outputs.ticket_id }}
+        shell: bash
+        run: |
+          echo "Attempting to close Jira issue: $JIRA_ISSUE_KEY"
+      
+          transitions=$(curl -fsS \
+            -u "$JIRA_EMAIL:$JIRA_TOKEN" \
+            -H "Accept: application/json" \
+            "$JIRA_BASE_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions")
+      
+          transition_id=$(echo "$transitions" | jq -r '
+            .transitions[]
+            | select(
+                (.name | ascii_downcase) == "done"
+                or (.name | ascii_downcase) == "close"
+                or (.name | ascii_downcase) == "closed"
+              )
+            | .id
+          ' | head -n 1)
+      
+          if [ -z "$transition_id" ] || [ "$transition_id" = "null" ]; then
+            echo "WARNING: No close transition found for $JIRA_ISSUE_KEY"
+            exit 1
+          fi
+      
+          curl -fsS -X POST \
+            -u "$JIRA_EMAIL:$JIRA_TOKEN" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            "$JIRA_BASE_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions" \
+            -d "{\"transition\":{\"id\":\"$transition_id\"}}"
+      
+          echo "Jira issue $JIRA_ISSUE_KEY closed successfully."      
