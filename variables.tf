@@ -1,8 +1,3 @@
-variable "subscription_id" {
-  description = "Azure subscription ID the provider authenticates against."
-  type        = string
-}
-
 variable "environment" {
   description = "Environment name (e.g. dev, staging, prod). Used for tagging/naming."
   type        = string
