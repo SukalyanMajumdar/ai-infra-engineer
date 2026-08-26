@@ -55,22 +55,28 @@ jobs:
           terraform apply -auto-approve \
             -var-file="inputs/core.tfvars" \
             -var-file="inputs/dev.tfvars"
+            
       - name: Get Jira ticket ID
         id: jira
-        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          BRANCH="${{ github.event.pull_request.head.ref }}"
+          PR_BRANCH=$(gh api \
+            "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
+            --jq '.[0].head.ref' \
+            | head -n 1)
       
-          TICKET_ID=$(echo "$BRANCH" | grep -oE 'KAN-[0-9]+' | head -n 1)
+          echo "Merged PR branch: $PR_BRANCH"
+      
+          TICKET_ID=$(echo "$PR_BRANCH" | grep -oE 'KAN-[0-9]+' | head -n 1)
       
           if [ -z "$TICKET_ID" ]; then
-            echo "WARNING: Could not find Jira ticket ID in branch: $BRANCH"
+            echo "WARNING: Could not determine Jira ticket"
             exit 0
           fi
       
-          echo "ticket_id=$TICKET_ID" >> "$GITHUB_OUTPUT"
-          echo "Jira ticket: $TICKET_ID"
-      
+          echo "ticket_id=$TICKET_ID" >> "$GITHUB_OUTPUT"    
+          
       - name: Close Jira issue
         if: steps.jira.outputs.ticket_id != ''
         continue-on-error: true
