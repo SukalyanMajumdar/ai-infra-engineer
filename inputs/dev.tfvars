@@ -83,6 +83,14 @@ storage_accounts = {
     access_tier              = "Cool"
     tags                     = { component = "diagnostics" }
   }
+  purpose16 = {
+    name                     = "stpurpose16eastus"
+    resource_group_key       = "data"
+    location                 = "eastus"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    tags                     = { component = "purpose16" }
+  }
 }
 
 # ---------------------------------------------------------------------------
