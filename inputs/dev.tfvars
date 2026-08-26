@@ -4,8 +4,13 @@
 # Every block below is a map, so adding another entry deploys another
 # instance of that resource type via the module's for_each.
 # ---------------------------------------------------------------------------
-
 environment = "dev"
+
+common_tags = {
+  managed_by = "terraform"
+  owner      = "platform-team"
+  costcenter = "cc-1234"
+}
 
 # ---------------------------------------------------------------------------
 # Resource Groups
