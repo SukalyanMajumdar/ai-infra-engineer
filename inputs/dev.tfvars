@@ -66,6 +66,12 @@ subnets = {
     vnet_key           = "main"
     address_prefixes   = ["10.0.1.0/27"]
   }
+  deployment3 = {
+    name               = "snet-deployment3-dev"
+    resource_group_key = "app"
+    vnet_key           = "main"
+    address_prefixes   = ["10.0.3.0/27"]
+  }
 }
 
 # ---------------------------------------------------------------------------
@@ -93,7 +99,7 @@ storage_accounts = {
     name                     = "stpurpose16eastus"
     resource_group_key       = "data"
     location                 = "eastus"
-    account_tier              = "Standard"
+    account_tier             = "Standard"
     account_replication_type = "LRS"
     tags                     = { component = "purpose16" }
   }
