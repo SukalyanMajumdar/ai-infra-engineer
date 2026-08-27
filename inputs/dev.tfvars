@@ -30,7 +30,7 @@ vnets = {
     name               = "vnet-myapp-dev-southindia"
     resource_group_key = "app"
     location           = "southindia"
-    address_space      = ["10.10.0.0/16"]
+    address_space      = ["10.10.0.0/16", "10.0.0.0/16"]
     tags               = { component = "network" }
   }
 }
@@ -60,6 +60,12 @@ subnets = {
     address_prefixes   = ["10.10.3.0/24"]
     service_endpoints  = ["Microsoft.Storage"]
   }
+  deployment2 = {
+    name               = "snet-deployment2-dev"
+    resource_group_key = "app"
+    vnet_key           = "main"
+    address_prefixes   = ["10.0.1.0/27"]
+  }
 }
 
 # ---------------------------------------------------------------------------
@@ -87,7 +93,7 @@ storage_accounts = {
     name                     = "stpurpose16eastus"
     resource_group_key       = "data"
     location                 = "eastus"
-    account_tier             = "Standard"
+    account_tier              = "Standard"
     account_replication_type = "LRS"
     tags                     = { component = "purpose16" }
   }
