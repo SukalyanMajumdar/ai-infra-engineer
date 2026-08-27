@@ -109,6 +109,14 @@ storage_accounts = {
     account_replication_type = "LRS"
     tags                     = { component = "purpose16" }
   }
+  demo = {
+    name                     = "stdemoeastus"
+    resource_group_key       = "data"
+    location                 = "eastus"
+    account_tier             = "Standard"
+    account_replication_type = "LRS"
+    tags                     = { component = "demo" }
+  }
 }
 
 # ---------------------------------------------------------------------------
