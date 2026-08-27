@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  
+
 concurrency:
   group: terraform-plan
   cancel-in-progress: false
@@ -55,7 +55,7 @@ jobs:
           terraform apply -auto-approve \
             -var-file="inputs/core.tfvars" \
             -var-file="inputs/dev.tfvars"
-            
+
       - name: Get Jira ticket ID
         id: jira
         env:
@@ -65,18 +65,79 @@ jobs:
             "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
             --jq '.[0].head.ref' \
             | head -n 1)
-      
+
           echo "Merged PR branch: $PR_BRANCH"
-      
+
           TICKET_ID=$(echo "$PR_BRANCH" | grep -oE 'KAN-[0-9]+' | head -n 1)
-      
+
           if [ -z "$TICKET_ID" ]; then
             echo "WARNING: Could not determine Jira ticket"
             exit 0
           fi
-      
-          echo "ticket_id=$TICKET_ID" >> "$GITHUB_OUTPUT"    
-          
+
+          echo "ticket_id=$TICKET_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Add Jira work note
+        if: steps.jira.outputs.ticket_id != ''
+        continue-on-error: true
+        env:
+          JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ vars.JIRA_EMAIL }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          JIRA_ISSUE_KEY: ${{ steps.jira.outputs.ticket_id }}
+        shell: bash
+        run: |
+          echo "Adding work note to Jira issue: $JIRA_ISSUE_KEY"
+
+          if [ -z "$JIRA_BASE_URL" ]; then
+            echo "ERROR: JIRA_BASE_URL is EMPTY"
+            exit 1
+          fi
+
+          if [[ "$JIRA_BASE_URL" != https://* ]]; then
+            echo "ERROR: JIRA_BASE_URL does not start with https://"
+            exit 1
+          fi
+
+          JIRA_URL="${JIRA_BASE_URL%/}"
+
+          WORK_NOTE="Deployment completed successfully.
+
+          Terraform Apply completed successfully after the approved GitHub PR was merged to master.
+
+          GitHub repository: ${GITHUB_REPOSITORY}
+          Commit: ${GITHUB_SHA}"
+
+          jq -n \
+            --arg body "$WORK_NOTE" \
+            '{
+              body: {
+                type: "doc",
+                version: 1,
+                content: [
+                  {
+                    type: "paragraph",
+                    content: [
+                      {
+                        type: "text",
+                        text: $body
+                      }
+                    ]
+                  }
+                ]
+              }
+            }' > /tmp/jira-comment.json
+
+          curl -fsS -X POST \
+            -u "$JIRA_EMAIL:$JIRA_TOKEN" \
+            -H "Accept: application/json" \
+            -H "Content-Type: application/json" \
+            "$JIRA_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/comment" \
+            --data @/tmp/jira-comment.json
+
+          echo
+          echo "Jira work note added successfully."
+
       - name: Close Jira issue
         if: steps.jira.outputs.ticket_id != ''
         continue-on-error: true
@@ -88,31 +149,31 @@ jobs:
         shell: bash
         run: |
           echo "Attempting to close Jira issue: $JIRA_ISSUE_KEY"
-      
+
           echo "JIRA_BASE_URL length: ${#JIRA_BASE_URL}"
           echo "JIRA_BASE_URL starts with https: ${JIRA_BASE_URL#https://}"
-      
+
           if [ -z "$JIRA_BASE_URL" ]; then
             echo "ERROR: JIRA_BASE_URL is EMPTY"
             exit 1
           fi
-      
+
           if [[ "$JIRA_BASE_URL" != https://* ]]; then
             echo "ERROR: JIRA_BASE_URL does not start with https://"
             exit 1
           fi
-      
+
           JIRA_URL="${JIRA_BASE_URL%/}"
-      
+
           echo "Jira host configuration looks valid."
-      
+
           transitions=$(curl -v -fsS \
             -u "$JIRA_EMAIL:$JIRA_TOKEN" \
             -H "Accept: application/json" \
             "$JIRA_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions")
-      
+
           echo "$transitions"
-      
+
           transition_id=$(echo "$transitions" | jq -r '
             .transitions[]
             | select(
@@ -122,20 +183,20 @@ jobs:
               )
             | .id
           ' | head -n 1)
-      
+
           if [ -z "$transition_id" ] || [ "$transition_id" = "null" ]; then
             echo "WARNING: No close transition found for $JIRA_ISSUE_KEY"
             exit 1
           fi
-      
+
           echo "Using Jira transition ID: $transition_id"
-      
+
           curl -fsS -X POST \
             -u "$JIRA_EMAIL:$JIRA_TOKEN" \
             -H "Accept: application/json" \
             -H "Content-Type: application/json" \
             "$JIRA_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions" \
             -d "{\"transition\":{\"id\":\"$transition_id\"}}"
-      
+
           echo
-          echo "Jira issue $JIRA_ISSUE_KEY closed successfully."   
+          echo "Jira issue $JIRA_ISSUE_KEY closed successfully."
