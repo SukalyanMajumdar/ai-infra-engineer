@@ -89,10 +89,29 @@ jobs:
         run: |
           echo "Attempting to close Jira issue: $JIRA_ISSUE_KEY"
       
-          transitions=$(curl -fsS \
+          echo "JIRA_BASE_URL length: ${#JIRA_BASE_URL}"
+          echo "JIRA_BASE_URL starts with https: ${JIRA_BASE_URL#https://}"
+      
+          if [ -z "$JIRA_BASE_URL" ]; then
+            echo "ERROR: JIRA_BASE_URL is EMPTY"
+            exit 1
+          fi
+      
+          if [[ "$JIRA_BASE_URL" != https://* ]]; then
+            echo "ERROR: JIRA_BASE_URL does not start with https://"
+            exit 1
+          fi
+      
+          JIRA_URL="${JIRA_BASE_URL%/}"
+      
+          echo "Jira host configuration looks valid."
+      
+          transitions=$(curl -v -fsS \
             -u "$JIRA_EMAIL:$JIRA_TOKEN" \
             -H "Accept: application/json" \
-            "$JIRA_BASE_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions")
+            "$JIRA_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions")
+      
+          echo "$transitions"
       
           transition_id=$(echo "$transitions" | jq -r '
             .transitions[]
@@ -109,11 +128,14 @@ jobs:
             exit 1
           fi
       
+          echo "Using Jira transition ID: $transition_id"
+      
           curl -fsS -X POST \
             -u "$JIRA_EMAIL:$JIRA_TOKEN" \
             -H "Accept: application/json" \
             -H "Content-Type: application/json" \
-            "$JIRA_BASE_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions" \
+            "$JIRA_URL/rest/api/3/issue/$JIRA_ISSUE_KEY/transitions" \
             -d "{\"transition\":{\"id\":\"$transition_id\"}}"
       
-          echo "Jira issue $JIRA_ISSUE_KEY closed successfully."      
+          echo
+          echo "Jira issue $JIRA_ISSUE_KEY closed successfully."   
