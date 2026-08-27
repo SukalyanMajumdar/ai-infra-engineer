@@ -39,6 +39,12 @@ vnets = {
 # Subnets
 # ---------------------------------------------------------------------------
 subnets = {
+  demo = {
+    name               = "snet-demo-dev"
+    resource_group_key = "app"
+    vnet_key           = "main"
+    address_prefixes   = ["10.10.0.0/27"]
+  }
   app = {
     name               = "snet-app-dev"
     resource_group_key = "app"
