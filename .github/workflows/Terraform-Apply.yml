@@ -81,8 +81,8 @@ jobs:
         if: steps.jira.outputs.ticket_id != ''
         continue-on-error: true
         env:
-          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ vars.JIRA_EMAIL }}
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           JIRA_ISSUE_KEY: ${{ steps.jira.outputs.ticket_id }}
         shell: bash
