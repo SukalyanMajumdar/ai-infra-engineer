@@ -72,6 +72,12 @@ subnets = {
     vnet_key           = "main"
     address_prefixes   = ["10.0.3.0/27"]
   }
+  deployment4 = {
+    name               = "snet-deployment4-dev"
+    resource_group_key = "app"
+    vnet_key           = "main"
+    address_prefixes   = ["10.0.4.0/27"]
+  }
 }
 
 # ---------------------------------------------------------------------------
