@@ -30,7 +30,7 @@ vnets = {
     name               = "vnet-myapp-dev-southindia"
     resource_group_key = "app"
     location           = "southindia"
-    address_space      = ["10.10.0.0/16", "10.0.0.0/16"]
+    address_space      = ["10.10.0.0/16", "10.0.0.0/16", "192.168.0.0/24"]
     tags               = { component = "network" }
   }
 }
