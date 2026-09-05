@@ -30,7 +30,7 @@ vnets = {
     name               = "vnet-myapp-dev-southindia"
     resource_group_key = "app"
     location           = "southindia"
-    address_space      = ["10.10.0.0/16", "10.0.0.0/16"]
+    address_space      = ["10.10.0.0/16", "10.0.0.0/16", "192.168.0.0/24"]
     tags               = { component = "network" }
   }
 }
@@ -160,7 +160,7 @@ nsg_rules = {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                  = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefix      = "Internet"
@@ -174,7 +174,7 @@ nsg_rules = {
     priority                   = 4096
     direction                  = "Inbound"
     access                     = "Deny"
-    protocol                   = "*"
+    protocol                  = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*"
